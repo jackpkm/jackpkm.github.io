@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://staff.ie.cuhk.edu.hk/~khzhang/ierg4210/demo/ajaxForm.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>IERG4210 AjaxForm Demo!</title>
+  </head>
+
+  <body data-new-gr-c-s-check-loaded="14.1151.0" data-gr-ext-installed="">
+
+<form id="loginForm" method="POST" action="https://staff.ie.cuhk.edu.hk/~khzhang/ierg4210/incl/process.php">
+  Email: <input type="email" name="em" title="valid email" required="true" pattern="^[\w=+\-\/][\w=\&#39;+\-\/\.]*@[\w\-]+(\.[\w\-]+)*(\.[\w]{2,6})$"><br>
+  Password: <input type="password" name="pw" title="valid password" required="true"><br>
+  <input type="hidden" name="action" value="login">
+  <input type="submit" value="Login">
+  <!--<select name="test[]" multiple><option value="1">option1</option><option value="2">option2</option></select> -->
+  <p>Feedback from Server: </p>
+  <div id="result" style="color:green">POST Parameters: &lt;pre&gt;Array
+(
+    [em] =&gt; asdsa@asdas
+    [pw] =&gt; asdasa
+    [action] =&gt; login
+)
+&lt;/pre&gt;&lt;br/&gt;
+GET Parameters: &lt;pre&gt;Array
+(
+)
+&lt;/pre&gt;</div>
+</form>
+	
+<script type="text/javascript">
+(function() {
+
+function serializeFormData(form) {
+	return [].map.call(form.elements, function(el) {
+		if (el.name 
+				&& !el.disabled
+				&& (!el.type || el.type.toLowerCase() !== 'checkbox' || el.checked)) {
+			
+			if (el.tagName === 'SELECT' && el.hasAttribute('multiple'))
+				return [].map.call(el.selectedOptions, function(o) {
+					return [el.name, o.value].map(encodeURIComponent).join('=');
+				}).join('&');
+
+			return [el.name, el.value].map(encodeURIComponent).join('=');
+		}
+		return '';
+	}).join('&');
+};
+
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+	// Always cancel the default submission
+	e.preventDefault();
+
+	var xhr = (window.XMLHttpRequest) 
+			? new XMLHttpRequest()                     // IE7+, Firefox1+, Chrome1+, etc
+			: new ActiveXObject("Microsoft.XMLHTTP"),  // IE 6
+		async = true,
+		method = this.getAttribute('method'),
+		url = this.getAttribute('action'),
+		formData;
+
+	// open the connection
+	xhr.open(method, url, async);
+
+	// config the default request header as required by POST
+	if (method.toLowerCase() === 'post') {
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+
+	// register a callback function to listen to readystatechange
+	xhr.onreadystatechange = function () {
+	    if (this.readyState === 4 && this.status === 200) {
+	        // copy the response to an element called el
+	        var resp = this.responseText;
+	        document.getElementById('result').innerHTML = resp.replace(/</g, '&lt;');
+	    }
+	};
+
+	// serialize formData into urlencoded format (e.g., a=1&b=1)
+	formData = serializeFormData(this);
+
+	// send the request
+	xhr.send(formData);
+
+}, false);
+
+})();
+</script>
+
+  
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
